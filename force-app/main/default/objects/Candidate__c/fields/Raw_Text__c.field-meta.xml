@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Raw_Text__c</fullName>
+    <label>CV Raw Text</label>
+    <description>Extracted plain text of the CV. Primary source of truth for grounding answers.</description>
+    <inlineHelpText>Extracted plain text of the CV. Primary source of truth for grounding answers.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>131072</length>
+    <visibleLines>10</visibleLines>
+</CustomField>

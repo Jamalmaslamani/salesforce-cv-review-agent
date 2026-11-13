@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Years_Experience__c</fullName>
+    <label>Total Years Experience</label>
+    <description>Computed from the employment timeline (overlaps merged), not the candidate's self-claim.</description>
+    <inlineHelpText>Computed from the employment timeline (overlaps merged), not the candidate's self-claim.</inlineHelpText>
+    <type>Number</type>
+    <precision>4</precision>
+    <scale>1</scale>
+</CustomField>

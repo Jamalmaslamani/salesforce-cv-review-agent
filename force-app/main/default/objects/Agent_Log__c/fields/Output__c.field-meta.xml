@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Output__c</fullName>
+    <label>Output</label>
+    <description>Decision / answer summary (truncated).</description>
+    <inlineHelpText>Decision / answer summary (truncated).</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>3</visibleLines>
+</CustomField>

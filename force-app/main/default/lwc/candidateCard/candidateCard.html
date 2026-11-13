@@ -1,0 +1,79 @@
+<template>
+    <article class="slds-card cv-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <template lwc:if={selectable}>
+                    <div class="slds-media__figure">
+                        <lightning-input type="checkbox" variant="label-hidden" label="Select candidate" checked={selected} onchange={handleSelect}></lightning-input>
+                    </div>
+                </template>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <a onclick={openRecord} class="slds-truncate" title="Open record">{candidate.name}</a>
+                    </h2>
+                    <p class="slds-text-body_small slds-text-color_weak slds-truncate">{headline}</p>
+                </div>
+                <div class="slds-no-flex">
+                    <span class={statusClass}>{candidate.status}</span>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="quality slds-m-bottom_x-small">
+                <span class="slds-badge slds-badge_lightest">{completenessLabel}</span>
+                <span class="slds-badge slds-badge_lightest" title="Missing fields">✗ {counts.missing} missing</span>
+                <span class="slds-badge slds-badge_lightest" title="Conflicting details">⚠ {counts.conflict} conflicts</span>
+                <span class="slds-badge slds-badge_lightest" title="Inferred values">? {counts.inferred} inferred</span>
+            </div>
+            <ul class="fields">
+                <template for:each={fields} for:item="f">
+                    <li key={f.key} class="field" title={f.tip}>
+                        <lightning-icon icon-name={f.icon} variant={f.variant} size="xx-small" alternative-text={f.tip}></lightning-icon>
+                        <span class="field-label">{f.label}</span>
+                        <span class={f.valueClass}>{f.value}</span>
+                    </li>
+                </template>
+            </ul>
+            <div class="skills">
+                <template for:each={skills} for:item="s">
+                    <span key={s.key} class={s.cls} title={s.tip}>{s.name}</span>
+                </template>
+            </div>
+            <lightning-button variant="base" label={toggleLabel} icon-name={toggleIcon} onclick={toggle} class="slds-m-top_x-small"></lightning-button>
+            <template lwc:if={expanded}>
+                <div class="details">
+                    <h3 class="section">Experience</h3>
+                    <ul>
+                        <template for:each={experience} for:item="e">
+                            <li key={e.key}><strong>{e.title}</strong><template lwc:if={e.company}> · {e.company}</template>
+                                <span class="slds-text-color_weak"> {e.dates}</span>
+                                <template lwc:if={e.undated}><span class="conflict"> (undated)</span></template>
+                            </li>
+                        </template>
+                    </ul>
+                    <template lwc:if={hasEducation}>
+                        <h3 class="section">Education</h3>
+                        <ul><template for:each={education} for:item="e"><li key={e.key}>{e.text}</li></template></ul>
+                    </template>
+                    <template lwc:if={hasCerts}>
+                        <h3 class="section">Certifications</h3>
+                        <ul>
+                            <template for:each={certifications} for:item="c">
+                                <li key={c.key}>{c.text}<template lwc:if={c.conflict}><span class="conflict"> ⚠ conflicting</span></template></li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template lwc:if={hasIssues}>
+                        <h3 class="section">To verify</h3>
+                        <ul>
+                            <template for:each={issues} for:item="i">
+                                <li key={i.key} class={i.cls}><span class="issue-type">{i.label}</span> {i.message}</li>
+                            </template>
+                        </ul>
+                    </template>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">Source: {candidate.fileName} · {card.extractionMethod}</p>
+                </div>
+            </template>
+        </div>
+    </article>
+</template>

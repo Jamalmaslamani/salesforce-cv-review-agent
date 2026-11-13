@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Source_File_Name__c</fullName>
+    <label>Source File Name</label>
+    <description>Original file name.</description>
+    <inlineHelpText>Original file name.</inlineHelpText>
+    <type>Text</type>
+    <length>255</length>
+</CustomField>

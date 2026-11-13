@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Score_Breakdown_JSON__c</fullName>
+    <label>Score Breakdown (JSON)</label>
+    <description>Per-criterion scores, weights and evidence - the explainability record.</description>
+    <inlineHelpText>Per-criterion scores, weights and evidence - the explainability record.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>131072</length>
+    <visibleLines>4</visibleLines>
+</CustomField>

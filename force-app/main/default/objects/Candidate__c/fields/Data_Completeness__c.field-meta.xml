@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Data_Completeness__c</fullName>
+    <label>Data Completeness</label>
+    <description>Share of core card fields that were found in the CV.</description>
+    <inlineHelpText>Share of core card fields that were found in the CV.</inlineHelpText>
+    <type>Percent</type>
+    <precision>5</precision>
+    <scale>0</scale>
+</CustomField>

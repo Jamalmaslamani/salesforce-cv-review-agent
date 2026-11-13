@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Headline__c</fullName>
+    <label>Headline</label>
+    <description>Current title / headline from the CV.</description>
+    <inlineHelpText>Current title / headline from the CV.</inlineHelpText>
+    <type>Text</type>
+    <length>255</length>
+</CustomField>

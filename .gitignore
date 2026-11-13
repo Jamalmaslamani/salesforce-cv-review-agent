@@ -1,0 +1,11 @@
+.sf/
+.sfdx/
+.localdevserver/
+node_modules/
+deploy-*.json
+*.log
+.DS_Store
+
+# local helper scripts & logs (not part of the solution)
+logs/
+*.bat

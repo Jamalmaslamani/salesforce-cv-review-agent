@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Role_Criteria_JSON__c</fullName>
+    <label>Role Criteria (JSON)</label>
+    <description>Exact role profile used for scoring (required/nice-to-have skills, min years, weights).</description>
+    <inlineHelpText>Exact role profile used for scoring (required/nice-to-have skills, min years, weights).</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>4</visibleLines>
+</CustomField>

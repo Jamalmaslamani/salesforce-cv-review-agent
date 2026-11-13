@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>A recruiter's saved evaluation of a candidate for a specific role. Snapshot fields are immutable copies taken at bookmark time so the record stays auditable even if the CV is re-processed.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <label>Candidate Bookmark</label>
+    <nameField><displayFormat>BM-{00000}</displayFormat><label>Candidate Bookmark Number</label><type>AutoNumber</type></nameField>
+    <pluralLabel>Candidate Bookmarks</pluralLabel>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

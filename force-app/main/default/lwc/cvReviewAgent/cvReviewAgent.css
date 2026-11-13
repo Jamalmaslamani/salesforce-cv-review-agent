@@ -1,0 +1,35 @@
+.agent { padding-bottom: 1rem; }
+.busy { position: relative; display: flex; align-items: center; gap: 2.5rem; padding: 0.5rem 1rem; background: #f3f8fe; min-height: 2.5rem; }
+.busy lightning-spinner { position: relative; }
+.busy-label { margin-left: 2rem; font-size: 0.8125rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: #555; }
+.pill-stated { border: 1px solid #0176d3; background: #e3f3ff; border-radius: 1rem; padding: 0 0.4rem; }
+.pill-inferred { border: 1px dashed #a96404; border-radius: 1rem; padding: 0 0.4rem; }
+.examples { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+.example { font-size: 0.75rem; line-height: 1.6rem; border-radius: 1rem; }
+.grounding { font-size: 0.75rem; color: #3e3e3c; background: #f3f3f3; padding: 0.4rem 0.6rem; border-radius: 0.25rem; }
+.qa .q { font-weight: 700; margin-bottom: 0.35rem; }
+.qa .a { white-space: pre-wrap; font-size: 0.875rem; }
+.qa .meta { margin-top: 0.5rem; }
+.warnings { margin-top: 0.35rem; font-size: 0.75rem; color: #8c4b02; }
+.sources { margin-top: 0.4rem; font-size: 0.75rem; }
+.sources summary { cursor: pointer; color: #0176d3; }
+.sources li { margin: 0.2rem 0; }
+.recommendation { display: block; }
+.rec-success { background: #ebf7e6; border-color: #2e844a; }
+.rec-warning { background: #fef7ec; border-color: #dd7a01; }
+.rec-text { font-weight: 600; }
+.tradeoffs { margin-top: 0.4rem; font-size: 0.8125rem; }
+.eval .rank { font-size: 1.25rem; font-weight: 700; width: 2.5rem; color: #706e6b; }
+.eval-name { font-weight: 700; font-size: 1rem; }
+.score { font-size: 1.5rem; font-weight: 700; margin: 0 0.75rem; }
+.track { background: #ecebea; height: 0.4rem; border-radius: 0.2rem; margin-top: 0.4rem; }
+.bar { height: 100%; border-radius: 0.2rem; }
+.bar-strong { background: #2e844a; }
+.bar-possible { background: #dd7a01; }
+.bar-weak { background: #ba0517; }
+.list-title { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.2rem; }
+.good { color: #2e844a; }
+.bad { color: #ba0517; }
+.wrap { white-space: normal; }
+.nowrap { white-space: nowrap; }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Card_JSON__c</fullName>
+    <label>Candidate Card JSON</label>
+    <description>Full structured Candidate Card incl. per-field status (FOUND/INFERRED/MISSING/CONFLICT), confidence and evidence.</description>
+    <inlineHelpText>Full structured Candidate Card incl. per-field status (FOUND/INFERRED/MISSING/CONFLICT), confidence and evidence.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>131072</length>
+    <visibleLines>10</visibleLines>
+</CustomField>

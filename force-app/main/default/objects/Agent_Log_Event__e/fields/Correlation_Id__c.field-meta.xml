@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Correlation_Id__c</fullName>
+    <label>Correlation Id</label>
+    <description>Groups log entries of one user request.</description>
+    <inlineHelpText>Groups log entries of one user request.</inlineHelpText>
+    <type>Text</type>
+    <length>64</length>
+</CustomField>

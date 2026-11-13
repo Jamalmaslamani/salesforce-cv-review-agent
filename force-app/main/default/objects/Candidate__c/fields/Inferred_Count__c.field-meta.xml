@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Inferred_Count__c</fullName>
+    <label>Inferred Items</label>
+    <description>Number of values inferred rather than explicitly stated.</description>
+    <inlineHelpText>Number of values inferred rather than explicitly stated.</inlineHelpText>
+    <type>Number</type>
+    <precision>3</precision>
+    <scale>0</scale>
+</CustomField>

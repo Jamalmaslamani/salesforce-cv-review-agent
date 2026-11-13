@@ -1,0 +1,19 @@
+.cv-card { height: 100%; margin: 0; }
+.quality .slds-badge { margin-right: 0.25rem; }
+.fields { margin: 0.25rem 0 0.5rem; }
+.field { display: flex; align-items: center; gap: 0.4rem; padding: 0.1rem 0; font-size: 0.8125rem; }
+.field-label { color: var(--slds-g-color-neutral-base-50, #747474); min-width: 9.5rem; }
+.missing { color: var(--slds-g-color-neutral-base-60, #939393); font-style: italic; }
+.conflict { color: #ba0517; font-weight: 600; }
+.skills { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.skill { border-radius: 1rem; padding: 0.05rem 0.55rem; font-size: 0.75rem; }
+.skill-stated { background: #e3f3ff; border: 1px solid #0176d3; color: #014486; }
+.skill-inferred { background: #fff; border: 1px dashed #a96404; color: #8c4b02; }
+.details { margin-top: 0.5rem; border-top: 1px solid #e5e5e5; padding-top: 0.5rem; font-size: 0.8125rem; }
+.details ul { margin-left: 0.25rem; }
+.section { font-weight: 700; margin: 0.5rem 0 0.15rem; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.04em; color: #444; }
+.issue { padding: 0.15rem 0.4rem; border-left: 3px solid #c9c9c9; margin-bottom: 0.2rem; }
+.sev-high { border-left-color: #ba0517; background: #fef1ee; }
+.sev-medium { border-left-color: #dd7a01; background: #fef7ec; }
+.sev-low { border-left-color: #c9c9c9; }
+.issue-type { font-weight: 700; font-size: 0.7rem; margin-right: 0.25rem; }

@@ -1,0 +1,130 @@
+%PDF-1.3
+%“Œ‹ž ReportLab Generated PDF document (opensource)
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/Contents 8 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 7 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+5 0 obj
+<<
+/PageMode /UseNone /Pages 7 0 R /Type /Catalog
+>>
+endobj
+6 0 obj
+<<
+/Author (anonymous) /CreationDate (D:20261112185054-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20261112185054-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
+>>
+endobj
+7 0 obj
+<<
+/Count 1 /Kids [ 4 0 R ] /Type /Pages
+>>
+endobj
+8 0 obj
+<<
+/Length 2698
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 791.8898 Tm (Sara Haddad) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 777.8898 Tm (Senior Salesforce Developer) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 763.8898 Tm (sara.haddad@example.com | +961 70 123 456 | Beirut, Lebanon) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 749.8898 Tm  T* ET
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 735.8898 Tm (SUMMARY) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 717.8898 Tm (Salesforce developer with 8 years of experience building scalable Apex and LWC solutions for B2B SaaS clients.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 703.8898 Tm  T* ET
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 689.8898 Tm (EXPERIENCE) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 671.8898 Tm (Senior Salesforce Developer | Nimbus Cloud Solutions | Mar 2021 - Present) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 657.8898 Tm (- Led the design of an event-driven order sync using Platform Events and REST APIs.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 643.8898 Tm (- Built 30+ Lightning Web Components for the sales console.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 629.8898 Tm (- Introduced CI/CD with Git and scratch orgs, cutting release time by 40%.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 615.8898 Tm (- Prototyped an Agentforce agent for case triage.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 601.8898 Tm (Salesforce Developer | BrightPath Consulting | Jun 2018 - Feb 2021) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 587.8898 Tm (- Developed Apex triggers, batch jobs and SOQL-optimised services for 12 client orgs.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 573.8898 Tm (- Automated onboarding with Salesforce Flow.) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 559.8898 Tm  T* ET
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 545.8898 Tm (EDUCATION) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 527.8898 Tm (BSc Computer Science | American University of Beirut | 2018) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 513.8898 Tm  T* ET
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 499.8898 Tm (SKILLS) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 481.8898 Tm (Apex, LWC, SOQL, Salesforce Flow, REST APIs, Platform Events, Git, CI/CD, Agentforce) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 467.8898 Tm  T* ET
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 453.8898 Tm (CERTIFICATIONS) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 435.8898 Tm (Salesforce Platform Developer I \(2019\)) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 421.8898 Tm (Salesforce Platform Developer II \(2022\)) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 50 407.8898 Tm (Salesforce Agentforce Specialist \(2025\)) Tj T* ET
+ 
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000321 00000 n 
+0000000524 00000 n 
+0000000592 00000 n 
+0000000853 00000 n 
+0000000912 00000 n 
+trailer
+<<
+/ID 
+[<18889bf608c0bf08c108ca580e1d0355><18889bf608c0bf08c108ca580e1d0355>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 6 0 R
+/Root 5 0 R
+/Size 9
+>>
+startxref
+3661
+%%EOF

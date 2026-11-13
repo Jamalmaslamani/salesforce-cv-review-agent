@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Weight_Data_Confidence__c</fullName>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Weight: Data Confidence</label>
+    <description>Scoring weight (0-1).</description>
+    <type>Number</type>
+    <precision>5</precision>
+    <scale>2</scale>
+</CustomField>

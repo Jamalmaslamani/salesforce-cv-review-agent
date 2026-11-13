@@ -1,0 +1,251 @@
+<template>
+    <div class="agent slds-card">
+        <div class="slds-page-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="standard:job_profile" size="medium"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h1 class="slds-page-header__title">CV Review Agent</h1>
+                            <p class="slds-text-body_small slds-text-color_weak">{providerLabel} · {scoringLabel}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <template lwc:if={busy}>
+            <div class="busy">
+                <lightning-spinner alternative-text={busyLabel} size="small"></lightning-spinner>
+                <span class="busy-label">{busyLabel}</span>
+            </div>
+        </template>
+
+        <lightning-tabset variant="scoped">
+            <!-- =========================================================== CANDIDATES -->
+            <lightning-tab label="1. Candidates" icon-name="utility:people">
+                <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-file-upload label="Upload CVs (PDF or DOCX, up to 10 at a time)" name="cvUpload"
+                            accept={acceptedFormats} onuploadfinished={handleUploadFinished} multiple></lightning-file-upload>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-text-align_right">
+                        <lightning-button label="Load 5 sample CVs" icon-name="utility:download" onclick={handleLoadSamples} class="slds-m-top_large"></lightning-button>
+                    </div>
+                </div>
+
+                <template lwc:if={hasFileResults}>
+                    <div class="slds-box slds-box_x-small slds-m-bottom_small">
+                        <p class="slds-text-title_caps slds-m-bottom_xx-small">Last upload</p>
+                        <ul>
+                            <template for:each={fileResults} for:item="r">
+                                <li key={r.key} class="slds-m-bottom_xx-small">
+                                    <span class={r.cls}>{r.status}</span>
+                                    <strong class="slds-m-left_x-small">{r.fileName}</strong>
+                                    <span class="slds-text-color_weak"> - {r.message}</span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <div class="legend slds-m-bottom_small">
+                    <span><lightning-icon icon-name="utility:success" variant="success" size="xx-small"></lightning-icon> found in CV</span>
+                    <span><lightning-icon icon-name="utility:question_mark" variant="warning" size="xx-small"></lightning-icon> inferred</span>
+                    <span><lightning-icon icon-name="utility:ban" variant="error" size="xx-small"></lightning-icon> missing</span>
+                    <span><lightning-icon icon-name="utility:warning" variant="error" size="xx-small"></lightning-icon> conflict</span>
+                    <span><span class="pill-stated">skill</span> listed · <span class="pill-inferred">skill ?</span> inferred from experience (hover for evidence)</span>
+                </div>
+
+                <template lwc:if={hasCandidates}>
+                    <lightning-input type="search" label="Filter by name, skill or title" value={filter} onchange={handleFilter} class="slds-m-bottom_small"></lightning-input>
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_x-small">Tick candidates to limit questions and comparisons to them.</p>
+                    <div class="slds-grid slds-wrap slds-gutters_small">
+                        <template for:each={filteredCandidates} for:item="c">
+                            <div key={c.id} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_small">
+                                <c-candidate-card candidate={c} selectable selected={c.selected} onselect={handleCardSelect}></c-candidate-card>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-illustration slds-p-around_large slds-text-align_center">
+                        <p class="slds-text-heading_small">No candidates yet</p>
+                        <p class="slds-text-color_weak">Upload CVs or load the sample set to get started.</p>
+                    </div>
+                </template>
+            </lightning-tab>
+
+            <!-- =========================================================== ASK -->
+            <lightning-tab label="2. Ask the agent" icon-name="utility:chat">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3">
+                        <lightning-textarea label="Ask a question about one or more candidates" value={question} onchange={handleQuestion}
+                            onkeydown={handleQuestionKey} placeholder="e.g. Which candidates know LWC and Apex?" max-length="1000"></lightning-textarea>
+                        <div class="slds-m-vertical_x-small">
+                            <lightning-button variant="brand" label="Ask" icon-name="utility:search" onclick={handleAsk} disabled={busy}></lightning-button>
+                        </div>
+                        <div class="examples">
+                            <span class="slds-text-body_small slds-text-color_weak">Try:</span>
+                            <template for:each={exampleQuestions} for:item="q">
+                                <button key={q.key} class="slds-button slds-button_neutral example" data-q={q.label} onclick={handleExample}>{q.label}</button>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                        <lightning-checkbox-group label="Limit to (optional - default: all candidates)" options={candidateOptions}
+                            value={askScope} onchange={handleAskScope}></lightning-checkbox-group>
+                    </div>
+                </div>
+                <p class="grounding slds-m-vertical_small">
+                    Answers come only from the uploaded CVs. Every statement is backed by a quoted source; if the CVs don't say it, the agent says so instead of guessing.
+                </p>
+                <template lwc:if={hasConversation}>
+                    <template for:each={conversation} for:item="m">
+                        <div key={m.key} class="slds-box slds-m-bottom_small qa">
+                            <p class="q"><lightning-icon icon-name="utility:user" size="xx-small"></lightning-icon> {m.question}</p>
+                            <div class="a">{m.answer}</div>
+                            <div class="meta">
+                                <span class={m.confidenceClass}>{m.confidenceLabel}</span>
+                                <span class="slds-text-body_small slds-text-color_weak slds-m-left_x-small">{m.mode}</span>
+                            </div>
+                            <template lwc:if={m.hasWarnings}>
+                                <ul class="warnings">
+                                    <template for:each={m.warnings} for:item="w"><li key={w.key}>⚠ {w.text}</li></template>
+                                </ul>
+                            </template>
+                            <template lwc:if={m.hasCitations}>
+                                <details class="sources">
+                                    <summary>Sources from the CVs</summary>
+                                    <ul>
+                                        <template for:each={m.citations} for:item="c">
+                                            <li key={c.key}><strong>{c.who}:</strong> <q>{c.snippet}</q></li>
+                                        </template>
+                                    </ul>
+                                </details>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+            </lightning-tab>
+
+            <!-- =========================================================== COMPARE -->
+            <lightning-tab label="3. Compare &amp; recommend" icon-name="utility:ribbon">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-3">
+                        <div class="slds-grid slds-wrap slds-gutters_x-small">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_2-of-3">
+                                <lightning-input label="Role" data-field="title" value={role.title} onchange={handleRoleField} required></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                <lightning-input type="number" label="Minimum years" data-field="minYears" value={role.minYears} onchange={handleRoleField} min="0" max="40"></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input label="Required skills (comma-separated)" data-field="required" value={role.required} onchange={handleRoleField}></lightning-input>
+                            </div>
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                <lightning-input label="Nice-to-have skills" data-field="nice" value={role.nice} onchange={handleRoleField}></lightning-input>
+                            </div>
+                        </div>
+                        <div class="slds-m-top_small">
+                            <lightning-button variant="brand" label="Evaluate candidates" icon-name="utility:matrix" onclick={handleEvaluate} disabled={busy}></lightning-button>
+                            <lightning-button variant="base" label="Example role" onclick={handleExampleRole} class="slds-m-left_small"></lightning-button>
+                            <lightning-button variant="base" label="Role with no strong match" onclick={handleNoMatchRole} class="slds-m-left_small"></lightning-button>
+                        </div>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_x-small">
+                            Weights: {weightsLabel}. Listed skill = full credit, inferred skill = half credit. Experience uses the dates in the CV, not the candidate's claim.
+                            Missing any required skill caps the result below "Strong Match".
+                        </p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                        <lightning-checkbox-group label="Candidates to compare (default: all)" options={candidateOptions}
+                            value={compareScope} onchange={handleCompareScope}></lightning-checkbox-group>
+                    </div>
+                </div>
+
+                <template lwc:if={hasEvaluation}>
+                    <div class="slds-m-top_medium">
+                        <div class={recommendationClass}>
+                            <lightning-icon icon-name={recommendationIcon} size="small" class="slds-m-right_small"></lightning-icon>
+                            <span class="rec-text">{evaluation.recommendation}</span>
+                            <template lwc:if={hasTradeOffs}>
+                                <ul class="tradeoffs">
+                                    <template for:each={tradeOffs} for:item="t"><li key={t.key}>↔ {t.text}</li></template>
+                                </ul>
+                            </template>
+                        </div>
+
+                        <template for:each={rankedEvaluations} for:item="e">
+                            <div key={e.key} class="slds-box slds-m-bottom_small eval">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-wrap">
+                                    <div class="rank">#{e.rank}</div>
+                                    <div class="slds-col">
+                                        <p class="eval-name">{e.candidateName}
+                                            <template lwc:if={e.recommended}><span class="slds-badge slds-badge_inverse slds-m-left_x-small">Recommended</span></template>
+                                        </p>
+                                        <p class="slds-text-body_small slds-text-color_weak">{e.headline}</p>
+                                    </div>
+                                    <div class="score">{e.score}<span class="slds-text-body_small">/100</span></div>
+                                    <span class={e.tierClass}>{e.tier}</span>
+                                    <lightning-button label="Bookmark" icon-name="utility:bookmark" data-id={e.candidateId} onclick={openBookmark} class="slds-m-left_small"></lightning-button>
+                                </div>
+                                <div class="track"><div class={e.barClass} style={e.barStyle}></div></div>
+                                <button class="slds-button slds-m-top_x-small" data-id={e.candidateId} onclick={toggleEval}>{e.toggleLabel}</button>
+                                <template lwc:if={e.expanded}>
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-m-top_x-small">
+                                        <thead><tr><th>Criterion</th><th>Points</th><th>Why</th></tr></thead>
+                                        <tbody>
+                                            <template for:each={e.breakdown} for:item="b">
+                                                <tr key={b.key}><td>{b.name}</td><td class="nowrap">{b.pts}</td><td class="wrap">{b.explanation}</td></tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                    <div class="slds-grid slds-wrap slds-gutters_small slds-m-top_x-small">
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <p class="list-title good">Strengths</p>
+                                            <template lwc:if={e.hasStrengths}><ul><template for:each={e.strengthList} for:item="s"><li key={s.key}>+ {s.text}</li></template></ul></template>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <p class="list-title bad">Concerns</p>
+                                            <template lwc:if={e.hasConcerns}><ul><template for:each={e.concernList} for:item="s"><li key={s.key}>- {s.text}</li></template></ul></template>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                            <p class="list-title">Validate in interview</p>
+                                            <template lwc:if={e.hasFocus}><ul><template for:each={e.focusList} for:item="s"><li key={s.key}>? {s.text}</li></template></ul></template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </lightning-tab>
+        </lightning-tabset>
+
+        <!-- =========================================================== BOOKMARK MODAL -->
+        <template lwc:if={showBookmark}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="bm-title" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 id="bm-title" class="slds-modal__title">Bookmark {bookmarkTarget.candidateName}</h2>
+                        <p class="slds-m-top_x-small">For "{role.title}" · score {bookmarkTarget.score} ({bookmarkTarget.tier}) · rank #{bookmarkTarget.rank}</p>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_small">
+                            Saves a snapshot of the candidate overview, score breakdown, reasoning, interview focus and timestamp, so the record stays auditable even if the CV or scoring changes later.
+                        </p>
+                        <lightning-textarea label="Recruiter notes" value={bookmarkNotes} onchange={handleNotes} max-length="32000"
+                            placeholder="e.g. Strong fit - schedule technical interview, check REST API depth."></lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeBookmark}></lightning-button>
+                        <lightning-button variant="brand" label="Save bookmark" onclick={saveBookmark} class="slds-m-left_x-small" disabled={busy}></lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </div>
+</template>

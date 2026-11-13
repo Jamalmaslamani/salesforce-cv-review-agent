@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Recruiter_Notes__c</fullName>
+    <label>Recruiter Notes</label>
+    <description>Notes entered by the recruiter at bookmark time.</description>
+    <inlineHelpText>Notes entered by the recruiter at bookmark time.</inlineHelpText>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>4</visibleLines>
+    <trackHistory>true</trackHistory>
+</CustomField>

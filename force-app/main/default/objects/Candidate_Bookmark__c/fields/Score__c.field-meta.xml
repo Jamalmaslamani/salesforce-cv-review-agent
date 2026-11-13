@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Score__c</fullName>
+    <label>Score</label>
+    <description>Overall evaluation score (0-100) at bookmark time.</description>
+    <inlineHelpText>Overall evaluation score (0-100) at bookmark time.</inlineHelpText>
+    <type>Number</type>
+    <precision>5</precision>
+    <scale>1</scale>
+</CustomField>

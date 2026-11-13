@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Claimed_Years_Experience__c</fullName>
+    <label>Claimed Years Experience</label>
+    <description>Years of experience the candidate states in their summary, if any.</description>
+    <inlineHelpText>Years of experience the candidate states in their summary, if any.</inlineHelpText>
+    <type>Number</type>
+    <precision>4</precision>
+    <scale>1</scale>
+</CustomField>

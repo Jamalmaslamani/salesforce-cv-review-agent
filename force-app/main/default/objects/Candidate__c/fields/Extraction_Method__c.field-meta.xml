@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Extraction_Method__c</fullName>
+    <label>Extraction Method</label>
+    <description>Which extractor produced the card (e.g. Heuristic v1, LLM).</description>
+    <inlineHelpText>Which extractor produced the card (e.g. Heuristic v1, LLM).</inlineHelpText>
+    <type>Text</type>
+    <length>80</length>
+</CustomField>

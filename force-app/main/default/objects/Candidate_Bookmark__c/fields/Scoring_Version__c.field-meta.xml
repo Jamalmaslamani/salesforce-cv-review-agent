@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Scoring_Version__c</fullName>
+    <label>Scoring Version</label>
+    <description>Version of the scoring model used, so old scores can be interpreted later.</description>
+    <inlineHelpText>Version of the scoring model used, so old scores can be interpreted later.</inlineHelpText>
+    <type>Text</type>
+    <length>40</length>
+</CustomField>
