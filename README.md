@@ -29,17 +29,17 @@ No API key is needed. The agent runs in deterministic **Mock** mode by default. 
 
 ```mermaid
 flowchart LR
-    subgraph UI["🖥️ Recruiter UI (LWC)"]
+    subgraph UI["Recruiter UI (LWC)"]
         direction TB
         T1["1 · Candidates<br/>upload & cards"]
         T2["2 · Ask the agent<br/>Q&A + citations"]
         T3["3 · Compare<br/>score & bookmark"]
     end
 
-    AF["🤖 Agentforce / Flow<br/>invocable actions"]
+    AF["Agentforce / Flow<br/>invocable actions"]
     CTRL["CvAgentController<br/><i>thin facade</i>"]
 
-    subgraph SVC["⚙️ Services · with sharing · USER_MODE"]
+    subgraph SVC["Services · with sharing · USER_MODE"]
         direction TB
         ING["CvIngestionService"]
         QRY["CandidateQueryService"]
@@ -47,20 +47,20 @@ flowchart LR
         BMK["CandidateBookmarkService"]
     end
 
-    subgraph DOM["🧩 Extraction & grounding"]
+    subgraph DOM["Extraction & grounding"]
         direction TB
         EXT["CvTextExtractor<br/>PDF · DOCX · TXT"]
         PARSE["HeuristicCvParser<br/>rules"]
         VAL["CardValidator<br/>grounding check"]
     end
 
-    subgraph AI["🧠 Optional LLM"]
+    subgraph AI["Optional LLM"]
         direction TB
         PROV["LlmProvider<br/>interface"]
         IMPL["AnthropicLlmProvider<br/>Named Credential"]
     end
 
-    subgraph DATA["🗄️ Salesforce data"]
+    subgraph DATA["Salesforce data"]
         direction TB
         CAND[("Candidate__c")]
         BM[("Candidate_Bookmark__c")]
@@ -120,7 +120,7 @@ sequenceDiagram
 
 | Layer | Responsibility |
 |---|---|
-| `cvReviewAgent`, `candidateCard` (LWC) | UX only: no business rules. Shows provenance (✓ found, ? inferred, ✗ missing, ⚠ conflict), citations, confidence, score breakdown. |
+| `cvReviewAgent`, `candidateCard` (LWC) | UX only: no business rules. Shows provenance (found, inferred, missing, conflict), citations, confidence, score breakdown. |
 | `CvAgentController` | Input validation, delegation, converts exceptions into user-friendly messages with a **reference id** (the correlation id in Agent Logs). |
 | Services | `CvIngestionService`, `CandidateQueryService`, `CandidateScoringService`, `CandidateBookmarkService`: all `with sharing`, SOQL `WITH USER_MODE`. |
 | Domain | `CandidateCard` (schema), `HeuristicCvParser`, `SkillCatalog`, `RoleProfile`, `CardValidator`. |
