@@ -27,25 +27,99 @@ No API key is needed. The agent runs in deterministic **Mock** mode by default. 
 
 ## 2. Architecture
 
+```mermaid
+flowchart TB
+    subgraph UI["🖥️ Lightning Web Components"]
+        direction LR
+        T1["1 · Candidates<br/>upload & Candidate Cards"]
+        T2["2 · Ask the agent<br/>Q&A with citations"]
+        T3["3 · Compare & recommend<br/>scores & bookmarks"]
+    end
+
+    CTRL["CvAgentController<br/><i>thin facade · friendly errors</i>"]
+    AF["🤖 Agentforce / Flow<br/>AskCandidatesAction · EvaluateCandidatesAction"]
+
+    subgraph SVC["⚙️ Services (with sharing · USER_MODE)"]
+        direction LR
+        ING["CvIngestionService"]
+        QRY["CandidateQueryService"]
+        SCR["CandidateScoringService<br/><i>rules only</i>"]
+        BMK["CandidateBookmarkService<br/><i>snapshot + audit</i>"]
+    end
+
+    subgraph DOM["🧩 Extraction & grounding"]
+        direction LR
+        EXT["CvTextExtractor<br/>PDF · DOCX · TXT"]
+        PARSE["HeuristicCvParser<br/><i>deterministic rules</i>"]
+        LLMX["LlmCvExtractor"]
+        VAL["CardValidator<br/><i>grounding check</i>"]
+    end
+
+    subgraph AI["🧠 AI boundary"]
+        PROV["LlmProvider (interface)"]
+        IMPL["AnthropicLlmProvider<br/>via Named Credential"]
+        STUB["Test stub"]
+    end
+
+    subgraph DATA["🗄️ Data model"]
+        direction LR
+        CAND[("Candidate__c<br/>Candidate Card")]
+        BM[("Candidate_Bookmark__c")]
+        LOG[("Agent_Log__c")]
+        CFG[("CV_Agent_Setting__mdt")]
+    end
+
+    LOGGER["AgentLogger"] -->|"platform event<br/>(publish immediately)"| EVT(["Agent_Log_Event__e"]) -->|trigger| LOG
+
+    T1 & T2 & T3 --> CTRL
+    CTRL --> ING & QRY & SCR & BMK
+    AF --> QRY & SCR
+    ING --> EXT --> PARSE
+    ING --> LLMX --> VAL
+    QRY -.->|LLM mode, citations verified| PROV
+    LLMX --> PROV
+    PROV --> IMPL
+    PROV -.-> STUB
+    ING --> CAND
+    QRY --> CAND
+    SCR --> CAND
+    SCR --> CFG
+    BMK --> BM
+    SVC -.->|audit| LOGGER
+
+    classDef ui fill:#e3f3ff,stroke:#0176d3,color:#014486
+    classDef svc fill:#ebf7e6,stroke:#2e844a,color:#194e31
+    classDef ai fill:#fef7ec,stroke:#dd7a01,color:#8c4b02
+    classDef data fill:#f3f3f3,stroke:#706e6b,color:#181818
+    class T1,T2,T3,CTRL,AF ui
+    class ING,QRY,SCR,BMK,EXT,PARSE,LLMX,VAL svc
+    class PROV,IMPL,STUB ai
+    class CAND,BM,LOG,CFG,EVT,LOGGER data
 ```
-┌──────────────────────── LWC: cvReviewAgent (tabbed recruiter workspace) ────────────────────────┐
-│  1. Candidates (upload / cards)     2. Ask the agent (Q&A + citations)     3. Compare & bookmark │
-│                          c-candidate-card (provenance-aware card view)                           │
-└──────────────────────────────────────────────┬───────────────────────────────────────────────────┘
-                                               │ @AuraEnabled (thin facade, friendly errors)
-                                     CvAgentController
-        ┌───────────────────┬──────────────────┼──────────────────────┬─────────────────────────┐
- CvIngestionService  CandidateQueryService  CandidateScoringService  CandidateBookmarkService
-        │                   │                  │   (rules only)           │ (snapshot + audit)
- CvTextExtractor     rules engine ──┐          │                          │
- (PDF / DOCX / TXT)  LLM + citation │       RoleProfile                   │
- HeuristicCvParser   verification   │                                     │
- LlmCvExtractor ──── CardValidator  │                                     │
-        └──────────── LlmProvider (interface) ── AnthropicLlmProvider (Named Credential) / test stub
-                                               │
-            AgentLogger ──► Agent_Log_Event__e (publish immediately) ──► trigger ──► Agent_Log__c
-                                               │
-  Agentforce / Flow:  AskCandidatesAction · EvaluateCandidatesAction  (@InvocableMethod)
+
+**Request flow (ask a question):**
+
+```mermaid
+sequenceDiagram
+    actor R as Recruiter
+    participant UI as cvReviewAgent (LWC)
+    participant C as CvAgentController
+    participant Q as CandidateQueryService
+    participant L as LLM (optional)
+    participant G as AgentLogger
+    R->>UI: "Which candidates know LWC and Apex?"
+    UI->>C: ask(question, candidateIds)
+    C->>Q: ask()
+    Q->>Q: load Candidate Cards (USER_MODE)
+    alt Mock mode (default)
+        Q->>Q: intent routing → answer + CV snippets
+    else LLM mode
+        Q->>L: numbered CV lines + grounding rules
+        L-->>Q: JSON answer + line references
+        Q->>Q: verify every citation against the CV, drop invalid ones
+    end
+    Q->>G: log QUERY (correlation id)
+    Q-->>UI: answer · citations · confidence · warnings
 ```
 
 **Layers**
