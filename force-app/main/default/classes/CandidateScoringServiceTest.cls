@@ -61,8 +61,31 @@ private class CandidateScoringServiceTest {
     }
 
     @IsTest
+    static void unspecifiedCriteriaGiveNoFreePointsAndTitleMatters() {
+        System.runAs(TestDataFactory.agentUser()) {
+            RoleProfile r = new RoleProfile();
+            r.title = 'Data Analyst';
+            r.requiredSkills = new List<String>{ 'SQL', 'Python' };
+            r.minYears = 1;
+            CandidateScoringService.EvaluationResponse res = CandidateScoringService.evaluate(r, null);
+            CandidateScoringService.CandidateEvaluation top = res.evaluations[0];
+            Assert.areEqual('Priya Nair', top.candidateName, 'the actual data analyst wins');
+            Assert.isNotNull(top.titleMatch);
+            Assert.areEqual(0, top.breakdown[2].maxPoints, 'no nice-to-have skills given = no weight, no free points');
+            for (CandidateScoringService.CandidateEvaluation e : res.evaluations) {
+                if (e.candidateName == 'Sara Haddad') {
+                    Assert.isTrue(e.score < 60, 'a Salesforce developer must not score high for Data Analyst: ' + e.score);
+                    Assert.isNull(e.titleMatch);
+                }
+            }
+        }
+        Assert.isNull(CandidateScoringService.findTitleMatch(new HeuristicCvParser(TestDataFactory.AS_OF).parse(TestDataFactory.SARA), 'Data Analyst'));
+        Assert.isNotNull(CandidateScoringService.findTitleMatch(new HeuristicCvParser(TestDataFactory.AS_OF).parse(TestDataFactory.SARA), 'Salesforce Developer'));
+    }
+
+    @IsTest
     static void roleValidation() {
-        for (String bad : new List<String>{ '{"title":""}', '{"title":"X"}', '{"title":"X","minYears":99}' }) {
+        for (String bad : new List<String>{ '{"title":""}', '{"title":"X"}', '{"title":"X","minYears":5}', '{"title":"X","requiredSkills":["Apex"],"minYears":99}' }) {
             try { RoleProfile.fromJson(bad); Assert.fail(bad); } catch (RoleProfile.RoleException e) { Assert.isNotNull(e.getMessage()); }
         }
         Assert.areEqual(new List<String>{ 'LWC', 'Apex' }, RoleProfile.splitCsv('Lightning Web Components, apex; LWC'));

@@ -220,8 +220,10 @@ AI provider (`Mock` | `Anthropic`), Named Credential, model, scoring weights, ti
 | Data confidence | 15% | ½ × completeness + ½ × (1 − penalties: HIGH issue 0.25, MEDIUM 0.10) |
 
 * **Knock-out rule:** missing any required skill means the candidate can't be a *Strong Match*, whatever the score.
+* **No free points:** at least one required skill is mandatory, and if no nice-to-have skills are given their weight is redistributed to the other criteria. Otherwise every candidate who meets the years would score ~100 and the ranking would be meaningless.
+* **Role title relevance:** if the candidate's headline or a past job title contains all the meaningful words of the role title (seniority words like "Senior"/"Lead" are ignored), it's listed as a strength and used as the first tie-breaker. Otherwise it's listed as a concern. It deliberately doesn't add points: titles vary too much between companies to be scored reliably.
 * Tiers: Strong ≥ 75, Possible ≥ 55, else Weak (configurable).
-* Ties are broken by fewer HIGH issues, then more experience.
+* Ties are broken by matching job title, then fewer HIGH issues, then more experience.
 * Output per candidate: score = **exact sum of explained criteria**, strengths, concerns, **interview focus** (generated from gaps, inferred skills and conflicts).
 * **Recommendation:** up to 3 Strong matches. Otherwise *"No strong match. Best available option: X. Validate before progressing: …"*.
 * **Trade-offs:** where #2 beats #1 on any criterion, near-ties (< 5 pts) and top candidates with HIGH data issues are all spelled out.

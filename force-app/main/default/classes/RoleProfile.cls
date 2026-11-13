@@ -10,8 +10,8 @@ public with sharing class RoleProfile {
         r.requiredSkills = clean(r.requiredSkills);
         r.niceToHaveSkills = clean(r.niceToHaveSkills);
         if (String.isBlank(r.title)) { throw new RoleException('Please give the role a title.'); }
-        if (r.requiredSkills.isEmpty() && r.minYears == null) {
-            throw new RoleException('Add at least one required skill or a minimum years of experience, otherwise there is nothing to rank on.');
+        if (r.requiredSkills.isEmpty()) {
+            throw new RoleException('Add at least one required skill. Without skills every candidate who meets the years looks the same, so the ranking would not be meaningful.');
         }
         if (r.minYears != null && (r.minYears < 0 || r.minYears > 40)) { throw new RoleException('Minimum years must be between 0 and 40.'); }
         return r;

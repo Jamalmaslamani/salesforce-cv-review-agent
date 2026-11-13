@@ -44,6 +44,8 @@ public with sharing class CandidateScoringService {
         @AuraEnabled public List<String> interviewFocus = new List<String>();
         @AuraEnabled public String reasoning;
         @AuraEnabled public Integer highIssues = 0;
+        /** Current/previous job title (or headline) that matches the role title, if any. */
+        @AuraEnabled public String titleMatch;
     }
 
     public class EvaluationResponse {
@@ -99,7 +101,9 @@ public with sharing class CandidateScoringService {
         ev.candidateName = name;
         ev.headline = CandidateCard.valueOf(card.headline);
 
-        Decimal totalW = s.weightRequired + s.weightExperience + s.weightNiceToHave + s.weightConfidence;
+        // Criteria the recruiter did not specify must not hand out free points: their weight is redistributed.
+        Decimal wNice = role.niceToHaveSkills.isEmpty() ? 0 : s.weightNiceToHave;
+        Decimal totalW = s.weightRequired + s.weightExperience + wNice + s.weightConfidence;
         if (totalW <= 0) { totalW = 1; }
 
         // 1. Required skills
@@ -145,9 +149,9 @@ public with sharing class CandidateScoringService {
             if (sk == null) { continue; }
             if (sk.status == CandidateCard.INFERRED) { niceCredit += 0.5; niceInferred.add(skill); } else { niceCredit += 1; ev.matchedNiceToHave.add(skill); }
         }
-        Decimal niceRaw = role.niceToHaveSkills.isEmpty() ? 1 : niceCredit / role.niceToHaveSkills.size();
-        ev.breakdown.add(criterion('Nice-to-have skills', s.weightNiceToHave / totalW, niceRaw,
-            role.niceToHaveSkills.isEmpty() ? 'None specified.' :
+        Decimal niceRaw = role.niceToHaveSkills.isEmpty() ? 0 : niceCredit / role.niceToHaveSkills.size();
+        ev.breakdown.add(criterion('Nice-to-have skills', wNice / totalW, niceRaw,
+            role.niceToHaveSkills.isEmpty() ? 'None specified - weight redistributed to the other criteria.' :
             (ev.matchedNiceToHave.size() + niceInferred.size()) + '/' + role.niceToHaveSkills.size() + ' present' +
             (ev.matchedNiceToHave.isEmpty() ? '' : ' (' + String.join(ev.matchedNiceToHave, ', ') + ')') +
             (niceInferred.isEmpty() ? '' : '; inferred: ' + String.join(niceInferred, ', ')) + '.'));
@@ -172,8 +176,34 @@ public with sharing class CandidateScoringService {
         else if (ev.score >= s.possibleThreshold) { ev.tier = POSSIBLE; }
         else { ev.tier = WEAK; }
 
+        ev.titleMatch = findTitleMatch(card, role.title);
         explain(ev, card, role);
         return ev;
+    }
+
+    private static final Set<String> TITLE_NOISE = new Set<String>{
+        'senior', 'sr', 'junior', 'jr', 'lead', 'principal', 'staff', 'head', 'chief', 'associate', 'intern', 'trainee',
+        'the', 'of', 'and', 'for', 'a', 'an', 'i', 'ii', 'iii', 'level', 'remote'
+    };
+
+    /** A role title matches when all its meaningful words appear in the candidate's headline or one of their job titles. */
+    @TestVisible
+    private static String findTitleMatch(CandidateCard card, String roleTitle) {
+        Set<String> wanted = new Set<String>();
+        for (String w : (roleTitle == null ? '' : roleTitle.toLowerCase()).split('[^a-z0-9+#]+')) {
+            if (String.isNotBlank(w) && !TITLE_NOISE.contains(w)) { wanted.add(w); }
+        }
+        if (wanted.isEmpty()) { return null; }
+        List<String> titles = new List<String>();
+        if (CandidateCard.valueOf(card.headline) != null) { titles.add(card.headline.value); }
+        for (CandidateCard.Experience e : card.experience) {
+            if (e.title != null) { titles.add(e.title + (e.company != null ? ' at ' + e.company : '')); }
+        }
+        for (String t : titles) {
+            Set<String> have = new Set<String>(t.toLowerCase().split('[^a-z0-9+#]+'));
+            if (have.containsAll(wanted)) { return t; }
+        }
+        return null;
     }
 
     private static Criterion criterion(String name, Decimal weight, Decimal raw, String why) {
@@ -188,6 +218,8 @@ public with sharing class CandidateScoringService {
     }
 
     private static void explain(CandidateEvaluation ev, CandidateCard card, RoleProfile role) {
+        if (ev.titleMatch != null) { ev.strengths.add('Has held a matching title: ' + ev.titleMatch); }
+        else { ev.concerns.add('No current or previous title matching "' + role.title + '"'); }
         if (!ev.matchedRequired.isEmpty()) { ev.strengths.add('Lists required skills: ' + String.join(ev.matchedRequired, ', ')); }
         if (ev.years != null && role.minYears != null && ev.years >= role.minYears) { ev.strengths.add(ev.years + ' years of experience (' + role.minYears + ' required)'); }
         if (!ev.matchedNiceToHave.isEmpty()) { ev.strengths.add('Bonus skills: ' + String.join(ev.matchedNiceToHave, ', ')); }
@@ -239,6 +271,8 @@ public with sharing class CandidateScoringService {
 
     private static Boolean better(CandidateEvaluation a, CandidateEvaluation b) {
         if (a.score != b.score) { return a.score > b.score; }
+        Boolean aTitle = a.titleMatch != null; Boolean bTitle = b.titleMatch != null;
+        if (aTitle != bTitle) { return aTitle; }
         if (a.highIssues != b.highIssues) { return a.highIssues < b.highIssues; }
         return (a.years ?? 0) > (b.years ?? 0);
     }
@@ -272,7 +306,8 @@ public with sharing class CandidateScoringService {
             }
             Decimal gap = top.score - second.score;
             if (gap < 5) {
-                resp.tradeOffs.add('The top two are within ' + gap + ' points - treat the ranking as a tie and let interviews decide.');
+                resp.tradeOffs.add('The top two are within ' + gap + ' points - treat the ranking as a tie and let interviews decide' +
+                    (top.titleMatch != null && second.titleMatch == null ? ' (' + top.candidateName + ' ranks first because their past title matches the role).' : '.'));
             }
             if (top.highIssues > 0) {
                 resp.tradeOffs.add(top.candidateName + ' ranks first but has ' + top.highIssues + ' high-severity data issue(s) that need validating.');
